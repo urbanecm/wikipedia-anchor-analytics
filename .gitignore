@@ -1,0 +1,5 @@
+*.xml
+*.bz2
+*-index.txt
+venv/
+config.yaml
