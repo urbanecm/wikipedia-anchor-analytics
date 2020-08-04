@@ -44,7 +44,7 @@ for linking_page in dump.pages:
     except:
         with connection.cursor() as cur:
             cur.execute('UPDATE page SET page_processed=false WHERE page_id=%s', (linking_page.id, ))
-        connection.comment()
+        connection.commit()
         continue
 
     for link in parsed.filter_wikilinks():
