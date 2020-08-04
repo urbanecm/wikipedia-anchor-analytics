@@ -46,7 +46,7 @@ for linking_page in dump.pages:
         with connection.cursor() as cur:
             cur.execute(
                 '''
-                INSERT INTO links(link_source_page_id, link_source_page_title, link_target_page_title, link_anchor)
+                INSERT INTO link(link_source_page_id, link_source_page_title, link_target_page_title, link_anchor)
                 VALUES (%s, %s, %s, %s)
                 ''',
                 (linking_page.id, linking_page.title, linked_page_title, linked_anchor)

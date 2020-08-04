@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS links;
-CREATE TABLE links
+DROP TABLE IF EXISTS link;
+CREATE TABLE link
 (
 	link_id int primary key auto_increment not null,
 	link_source_page_id int not null,
@@ -8,8 +8,8 @@ CREATE TABLE links
 	link_anchor varchar(255)
 );
 
-DROP TABLE IF EXISTS anchors;
-CREATE TABLE anchors
+DROP TABLE IF EXISTS anchor;
+CREATE TABLE anchor
 (
 	anchor_id int primary key auto_increment not null,
 	anchor_page_id int not null,
