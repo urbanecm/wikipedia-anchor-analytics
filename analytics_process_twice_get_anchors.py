@@ -18,6 +18,10 @@ connection = pymysql.connect(host=config.get('DB_HOST'),
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
+def normalize_page_title(title):
+    tmp = title.replace(' ', '_')
+    return tmp[0].upper() + tmp[1:]
+
 
 for linking_page in dump.pages:
     # Sanity: Exclude non-mainpage pages
@@ -29,6 +33,11 @@ for linking_page in dump.pages:
         continue
         
     print('Processing %s' % linking_page.title)
+
+    with connection.cursor() as cur:
+        cur.execute('INSERT INTO page(page_id, page_title) VALUES (%s, %s)', (linking_page.id, linking_page.title))
+    connection.commit()
+
     revision = next(linking_page) # only current revision should be here
     parsed = mwparserfromhell.parse(revision.text)
 
@@ -42,6 +51,9 @@ for linking_page in dump.pages:
             continue # comment out if you want no anchor links to be included too
             linked_page_title = str(link.title)
             linked_anchor = None
+        
+        if linked_page_title == '':
+            linked_page_title = linking_page.title
 
         with connection.cursor() as cur:
             cur.execute(
@@ -49,6 +61,6 @@ for linking_page in dump.pages:
                 INSERT INTO link(link_source_page_id, link_source_page_title, link_target_page_title, link_anchor)
                 VALUES (%s, %s, %s, %s)
                 ''',
-                (linking_page.id, linking_page.title, linked_page_title, linked_anchor)
+                (linking_page.id, linking_page.title, normalize_page_title(linked_page_title), linked_anchor)
             )
             connection.commit()
