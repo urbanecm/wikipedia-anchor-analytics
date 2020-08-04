@@ -33,13 +33,19 @@ for linking_page in dump.pages:
         continue
         
     print('Processing %s' % linking_page.title)
+    revision = next(linking_page) # only current revision should be here
 
     with connection.cursor() as cur:
         cur.execute('INSERT INTO page(page_id, page_title) VALUES (%s, %s)', (linking_page.id, linking_page.title))
     connection.commit()
 
-    revision = next(linking_page) # only current revision should be here
-    parsed = mwparserfromhell.parse(revision.text)
+    try:
+        parsed = mwparserfromhell.parse(revision.text)
+    except:
+        with connection.cursor() as cur:
+            cur.execute('UPDATE page SET page_processed=false WHERE page_id=%s', (linking_page.id, ))
+        connection.comment()
+        continue
 
     for link in parsed.filter_wikilinks():
         m = RE_ANCHOR.search(str(link.title))

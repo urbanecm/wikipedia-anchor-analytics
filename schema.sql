@@ -2,7 +2,8 @@ DROP TABLE IF EXISTS page;
 CREATE TABLE page
 (
 	page_id int primary key not null,
-	page_title varchar(255) not null
+	page_title varchar(255) not null,
+	page_processed boolean default true not null
 );
 
 DROP TABLE IF EXISTS link;
