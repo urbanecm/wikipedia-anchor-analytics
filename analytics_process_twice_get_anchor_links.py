@@ -52,8 +52,8 @@ for linking_page in dump.pages:
         m = RE_ANCHOR.search(html.unencode(urllib.parse.unquote(str(link.title))))
 
         if m is not None:
-            linked_page_title = m.group(1)
-            linked_anchor = m.group(2)
+            linked_page_title = m.group(1).strip()
+            linked_anchor = m.group(2).strip()
         else:
             continue # comment out if you want no anchor links to be included too
             linked_page_title = str(link.title)
