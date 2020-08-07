@@ -5,6 +5,7 @@ import yaml
 import mwxml
 import mwparserfromhell
 import re
+import html
 
 config = yaml.safe_load(open('config.yaml'))
 
@@ -21,7 +22,6 @@ connection = pymysql.connect(host=config.get('DB_HOST'),
 def normalize_page_title(title):
     tmp = title.replace(' ', '_')
     return tmp[0].upper() + tmp[1:]
-
 
 for linking_page in dump.pages:
     # Sanity: Exclude non-mainpage pages
@@ -48,7 +48,7 @@ for linking_page in dump.pages:
         continue
 
     for link in parsed.filter_wikilinks():
-        m = RE_ANCHOR.search(str(link.title))
+        m = RE_ANCHOR.search(html.unencode(str(link.title)))
 
         if m is not None:
             linked_page_title = m.group(1)
