@@ -44,7 +44,7 @@ for linking_page in dump.pages:
         parsed = mwparserfromhell.parse(revision.text)
     except:
         with connection.cursor() as cur:
-            cur.execute('UPDATE page SET page_processed=false WHERE page_id=%s', (linking_page.id, ))
+            cur.execute('UPDATE page SET page_link_processed=false WHERE page_id=%s', (linking_page.id, ))
         connection.commit()
         continue
 
