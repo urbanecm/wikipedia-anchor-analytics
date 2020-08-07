@@ -3,7 +3,8 @@ CREATE TABLE page
 (
 	page_id int primary key not null,
 	page_title varchar(255) not null,
-	page_processed boolean default true not null
+	page_link_processed boolean default true not null,
+	page_anchor_processed boolean default true not null
 );
 
 DROP TABLE IF EXISTS link;
