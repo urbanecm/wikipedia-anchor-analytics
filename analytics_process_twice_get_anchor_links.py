@@ -67,6 +67,6 @@ for linking_page in dump.pages:
                 INSERT INTO link(link_source_page_id, link_source_page_title, link_target_page_title, link_anchor)
                 VALUES (%s, %s, %s, %s)
                 ''',
-                (linking_page.id, linking_page.title, normalize_page_title(linked_page_title), linked_anchor)
+                (linking_page.id, normalize_page_title(linking_page.title), normalize_page_title(linked_page_title), linked_anchor)
             )
             connection.commit()
