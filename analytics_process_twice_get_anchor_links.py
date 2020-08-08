@@ -9,6 +9,7 @@ import html
 import urllib.parse
 
 config = yaml.safe_load(open('config.yaml'))
+LIMIT = 1
 
 dump = mwxml.Dump.from_file(open("cswiki-latest-pages-articles-multistream.xml"))
 RE_ANCHOR = re.compile(r'([^#]*)#(.*)')
@@ -24,6 +25,18 @@ def normalize_page_title(title):
     tmp = title.replace(' ', '_')
     return tmp[0].upper() + tmp[1:]
 
+
+# cleanup
+with connection.cursor() as cur:
+    cur.execute('TRUNCATE TABLE page;') # TODO: Make this actually not truncate
+
+with connection.cursor() as cur:
+    cur.execute('TRUNCATE TABLE link;')
+
+connection.commit()
+
+
+i = 0
 for linking_page in dump.pages:
     # Sanity: Exclude non-mainpage pages
     if linking_page.namespace != 0:
@@ -33,6 +46,10 @@ for linking_page in dump.pages:
     if linking_page.title == "Hlavní strana":
         continue
         
+    i += 1
+    if LIMIT is not None and i > LIMIT:
+        break
+
     print('Processing %s' % linking_page.title)
     revision = next(linking_page) # only current revision should be here
 
