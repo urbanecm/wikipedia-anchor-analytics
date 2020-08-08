@@ -9,7 +9,7 @@ import html
 import urllib.parse
 
 config = yaml.safe_load(open('config.yaml'))
-LIMIT = 1
+LIMIT = None
 
 dump = mwxml.Dump.from_file(open("cswiki-latest-pages-articles-multistream.xml"))
 RE_ANCHOR = re.compile(r'([^#]*)#(.*)')
