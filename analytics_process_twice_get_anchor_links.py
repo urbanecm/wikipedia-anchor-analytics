@@ -66,7 +66,7 @@ for linking_page in dump.pages:
         continue
 
     for link in parsed.filter_wikilinks():
-        m = RE_ANCHOR.search(html.unencode(urllib.parse.unquote(str(link.title))))
+        m = RE_ANCHOR.search(html.unescape(urllib.parse.unquote(str(link.title))))
 
         if m is not None:
             linked_page_title = m.group(1).strip()
