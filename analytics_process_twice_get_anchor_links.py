@@ -50,7 +50,6 @@ for linking_page in dump.pages:
     if LIMIT is not None and i > LIMIT:
         break
 
-    print('Processing %s' % linking_page.title)
     revision = next(linking_page) # only current revision should be here
 
     with connection.cursor() as cur:
